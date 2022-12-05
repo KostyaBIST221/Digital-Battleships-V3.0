@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8BEAB1CB292546B0000F5010 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BEAB1CA292546B0000F5010 /* main.c */; };
+		8BEAB2322938D5AB000F5010 /* CreateWar1-4.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BEAB2312938D5AB000F5010 /* CreateWar1-4.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,8 @@
 /* Begin PBXFileReference section */
 		8BEAB1C7292546B0000F5010 /* Digital Battleships */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Digital Battleships"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BEAB1CA292546B0000F5010 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		8BEAB2302938D5AB000F5010 /* CreateWar1-4.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CreateWar1-4.h"; sourceTree = "<group>"; };
+		8BEAB2312938D5AB000F5010 /* CreateWar1-4.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "CreateWar1-4.c"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +60,9 @@
 		8BEAB1C9292546B0000F5010 /* Digital Battleships */ = {
 			isa = PBXGroup;
 			children = (
+				8BEAB2302938D5AB000F5010 /* CreateWar1-4.h */,
 				8BEAB1CA292546B0000F5010 /* main.c */,
+				8BEAB2312938D5AB000F5010 /* CreateWar1-4.c */,
 			);
 			path = "Digital Battleships";
 			sourceTree = "<group>";
@@ -120,6 +125,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8BEAB1CB292546B0000F5010 /* main.c in Sources */,
+				8BEAB2322938D5AB000F5010 /* CreateWar1-4.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
