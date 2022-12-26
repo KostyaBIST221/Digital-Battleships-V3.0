@@ -13,7 +13,7 @@ inf create(){
     return d;
 }
 
-void PrintAnswers(inf b[11][11],int sg[11],int sv[11]){
+void PrintAnswers(inf b[][11],int sg[11],int sv[11]){
     printf("     A   B   C   D   E   F   G   H   I   J  \n");
     printf("   ┏━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┓\n");
     printf(" 1 ");
@@ -55,7 +55,7 @@ void PrintAnswers(inf b[11][11],int sg[11],int sv[11]){
     printf("\n");
 }
 
-void PrintField(inf a[11][11],int sg[11],int sv[11]){
+void PrintField(inf a[][11],int sg[11],int sv[11]){
     printf("     A   B   C   D   E   F   G   H   I   J  \n");
     printf("   ┏━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┓\n");
     printf(" 1 ");
@@ -89,17 +89,7 @@ void PrintField(inf a[11][11],int sg[11],int sv[11]){
     printf("\n");
 }
 
-inf CreatWarRandom(inf a[11][11]){
-    for (int i = 1; i<11;i++){
-        for (int j = 1; j<11;j++){
-            inf rg = create();
-            a[i][j]=rg;
-        }
-    }
-    return a[11][11];
-}
-
-inf FillingInAmounts(inf b[11][11]){
+inf FillingInAmounts(inf b[][11]){
     for (int i = 1; i<11;i++){
         for (int j = 1; j<11;j++){
             b[i][j].sum=-1;
@@ -108,7 +98,7 @@ inf FillingInAmounts(inf b[11][11]){
     return b[11][11];
 }
 
-int SumVer(inf b[11][11], int* sv){
+int SumVer(inf b[][11], int* sv){
     for(int i = 1;i<=10;i++){
         for(int j = 1;j<=10;j++){
             if (b[i][j].sum>-1){
@@ -119,7 +109,7 @@ int SumVer(inf b[11][11], int* sv){
     return 1;
 }
 
-int SumGor(inf b[11][11], int* sg){
+int SumGor(inf b[][11], int* sg){
     for(int i = 1;i<=10;i++){
         for(int j = 1;j<=10;j++){
             if (b[i][j].sum>-1){
@@ -182,7 +172,7 @@ int Transformation(char p){
     return py;
 }
 
-int Uppdate_ost(inf b[11][11], int ost){
+int Uppdate_ost(inf b[][11], int ost){
     for(int i = 1;i<=10;i++){
         for(int j = 1;j<=10;j++){
             if (b[i][j].sum==-2){
@@ -193,10 +183,10 @@ int Uppdate_ost(inf b[11][11], int ost){
     return ost;
 }
 
-inf Hit(inf b[11][11], int px, int py, int ost){
+int Hit(inf b[][11], int px, int py, int ost){
     printf("Попадание\nОсталось %i клеток\n",ost-1);
     b[px][py].sum=-2;
-    return b[11][11];
+    return 1;
 }
 
 void print_hp(int hp){
@@ -244,7 +234,7 @@ void Rules(){
     printf("\n");
 }
 
-void Games(inf b[11][11], int *sg, int *sv){
+void Games(inf b[][11], int *sg, int *sv){
     int ost=20;
     int hp=3;
     time_t t;
@@ -318,13 +308,18 @@ void main() {
     
 //------------Заполнение кораблей------------\\
     
-    a[11][11] = CreatWarRandom(a); //Заполниние массива случайными числами
+    for (int i = 1; i<11;i++){
+        for (int j = 1; j<11;j++){
+            inf rg = create();
+            a[i][j]=rg;
+        }
+    }//Заполниние массива случайными числами
     a[11][11] = FillingInAmounts(a); //Создание -1 значения суммы
     
-    a[11][11]=War4(a, data); //Корабль 4
-    a[11][11]=War3(a, data); //Корабль 3
-    a[11][11]=War2(a, data); //Корабль 2
-    a[11][11]=War1(a, data); //Корабль 1
+    War4(a, data); //Корабль 4
+    War3(a, data); //Корабль 3
+    War2(a, data); //Корабль 2
+    War1(a, data); //Корабль 1
     
     SumGor(a, sg);//Сумма горизонтали
     SumVer(a, sv);//Сумма вертикали
