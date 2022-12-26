@@ -284,17 +284,6 @@ int Create_new_player(int h0, int m0, int h1, int m1){
     }
     
     printf("Время прохождения - %i:%i\n",hour,minute);
-    
-    printf("Введите имя\n");
-    char Name[50];
-    scanf("%s", &Name);
-    if (Name=='0'){
-        return 1;
-    }
-    FILE *fp;
-    fp = fopen("/Users/kostya/c Lab/Digital Battleships/Digital Battleships/top.txt", "a");
-    fprintf(fp ,"\n%s-%i:%i",Name , hour, minute);
-    fclose(fp);
     return 0;
 }
 
