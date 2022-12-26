@@ -12,15 +12,17 @@ int SumGor(inf b[][11], int* sg);
 struct tm *mytime;
 int Transformation(char p);
 int Uppdate_ost(inf b[][11], int ost);
-int Hit(inf b[][11], int px, int py, int ost);
-void print_hp(int hp);
-int Create_new_player(int h0, int m0, int h1, int m1);
+int Hit(inf b[][11], int px, int py, int ost, int loc);
+int Create_new_player(int h0, int m0, int h1, int m1,int loc);
 void Rules();
-void Games(inf b[][11], int *sg, int *sv);
+void Games(inf b[][11], int *sg, int *sv, int loc);
 
 void main() {
     
 //------------Объявление переменных------------\\
+    //1-Русский
+    //2-Английский
+    int loc = 2;
     
     inf a[11][11];
     int sg[11] = {0,0,0,0,0,0,0,0,0,0,0};
@@ -57,13 +59,25 @@ void main() {
     int n;
     int d=1;
     while (d==1) {
-        printf("Добро пожаловать в Цифровой морской бой!\n");
-        printf("1-Играть\n2-Ответ\n3-Правила\n4-Выход\n");
+        if (loc==1){
+            printf("Добро пожаловать в Цифровой морской бой!\n");
+            printf("1-Играть\n2-Ответ\n3-Правила\n4-Смена языка\n5-Выход\n");
+        }
+        if (loc==2){
+            printf("Welcome to Digital Sea Battle!\n");
+            printf("1-Play\n2-Answer\n3-Rules\n4-Switch language\n5-Exit\n");
+        }
         scanf("%i",&n);
         switch (n) {
             case 1:
-                Games(a,sg,sv);
-                printf("Ответы:\n");
+                Games(a,sg,sv,loc);
+                if (loc==1){
+                    printf("Ответы:\n");
+                }
+                if (loc==2){
+                    printf("Answers\n");
+                }
+                
                 PrintAnswers(a,sg,sv);
                 break;
             case 2:
@@ -74,6 +88,10 @@ void main() {
 //                printf("Тут должны быть правила\n");
                 break;
             case 4:
+                if (loc==1) loc=2;
+                else if (loc==2) loc=1;
+                break;
+            case 5:
                 d=0;
                 break;
         }
@@ -258,18 +276,18 @@ int Uppdate_ost(inf b[][11], int ost){
     return ost;
 }
 
-int Hit(inf b[][11], int px, int py, int ost){
-    printf("Попадание\nОсталось %i клеток\n",ost-1);
+int Hit(inf b[][11], int px, int py, int ost, int loc){
+    if (loc==1){
+        printf("Попадание\nОсталось %i клеток\n",ost-1);
+    }
+    if (loc==2){
+        printf("Hit\nRemaining %i cells\n",ost-1);
+    }
     b[px][py].sum=-2;
     return 1;
 }
 
-void print_hp(int hp){
-    if (hp==3 || hp==2)printf("Осталось %i жизни\n",hp);
-    if (hp==1)printf("Осталась 1 жизнь\n");
-}
-
-int Create_new_player(int h0, int m0, int h1, int m1){
+int Create_new_player(int h0, int m0, int h1, int m1, int loc){
     int hour, minute;
     
     if (m1>=m0){
@@ -282,8 +300,12 @@ int Create_new_player(int h0, int m0, int h1, int m1){
             hour +=24;
         }
     }
-    
-    printf("Время прохождения - %i:%i\n",hour,minute);
+    if (loc==1){
+        printf("Время прохождения - %i:%i\n",hour,minute);
+    }
+    if (loc==2){
+        printf("Travel time - %i:%i\n",hour,minute);
+    }
     return 0;
 }
 
@@ -298,7 +320,7 @@ void Rules(){
     printf("\n");
 }
 
-void Games(inf b[][11], int *sg, int *sv){
+void Games(inf b[][11], int *sg, int *sv, int loc){
     int ost=20;
     int hp=3;
     time_t t;
@@ -311,7 +333,13 @@ void Games(inf b[][11], int *sg, int *sv){
     while (hp>=0 && ost>=0) {
         //ost=Uppdate_ost(b, ost); //Обновление остатка
         if (ost==0){
-            printf("Поздравляю вы победили!\n");
+            if (loc==1){
+                printf("Поздравляю вы победили!\n");
+            }
+            if (loc==2){
+                printf("Congratulations, you won!\n");
+            }
+            
             time_t t;
             t = time(NULL);
             mytime= localtime(&t);
@@ -319,7 +347,7 @@ void Games(inf b[][11], int *sg, int *sv){
             int m1 = mytime->tm_min;
 //            printf("%i-%i\n",h0,m0);
 //            printf("%i-%i\n",h1,m1);
-            Create_new_player(h0,m0,h1,m1);
+            Create_new_player(h0,m0,h1,m1,loc);
             ost-=20;
             break;
             //------Coming soon------\\
@@ -329,11 +357,23 @@ void Games(inf b[][11], int *sg, int *sv){
             printf("%s\n",Name);
              */
         }else if (hp==0){
-            printf("Вы проиграли\n");
+            if (loc==1){
+                printf("Вы проиграли\n");
+            }
+            if (loc==2){
+                printf("You lost\n");
+            }
+            
             break;
         }else{
             PrintField(b, sg, sv);
-            printf("Введите x,y\n");
+            if (loc==1){
+                printf("Введите x,y\n");
+            }
+            if (loc==2){
+                printf("Enter x,y\n");
+            }
+            
             getchar();
             scanf("%i %c",&px,&p);
             py=Transformation(p);
@@ -341,15 +381,34 @@ void Games(inf b[][11], int *sg, int *sv){
                 continue;
             }
             if (b[px][py].sum!=-1){
-                Hit(b, px, py, ost);
+                Hit(b, px, py, ost, loc);
                 ost--;
             }else if (b[px][py].sum==-2){
-                printf("Вы уже стреляли в данную точку\n");
+                if (loc==1){
+                    printf("Вы уже стреляли в данную точку\n");
+                }
+                if (loc==2){
+                    printf("You have already fired at this point\n");
+                }
+                
             }else{
-                printf("Промах\n");
+                if (loc==1){
+                    printf("Промах\n");
+                }
+                if (loc==2){
+                    printf("Miss\n");
+                }
+                
                 b[px][py].sum=-3;
                 hp--;
-                print_hp(hp);
+                if (loc==1){
+                    if (hp==3 || hp==2)printf("Осталось %i жизни\n",hp);
+                    if (hp==1)printf("Осталась 1 жизнь\n");
+                }
+                if (hp==3 || hp==2){
+                    printf("%i life left\n",hp);
+                    if (hp==1)printf("1 life left\n");
+                }
             }
         }
     }
