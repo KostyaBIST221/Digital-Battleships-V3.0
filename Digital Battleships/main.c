@@ -3,6 +3,83 @@
 #include <time.h>
 #include "CreateWar1-4.h"
 
+inf create();
+void PrintAnswers(inf b[][11],int sg[11],int sv[11]);
+void PrintField(inf a[][11],int sg[11],int sv[11]);
+int FillingInAmounts(inf b[][11]);
+int SumVer(inf b[][11], int* sv);
+int SumGor(inf b[][11], int* sg);
+struct tm *mytime;
+int Transformation(char p);
+int Uppdate_ost(inf b[][11], int ost);
+int Hit(inf b[][11], int px, int py, int ost);
+void print_hp(int hp);
+int Create_new_player(int h0, int m0, int h1, int m1);
+void Rules();
+void Games(inf b[][11], int *sg, int *sv);
+
+void main() {
+    
+//------------Объявление переменных------------\\
+    
+    inf a[11][11];
+    int sg[11] = {0,0,0,0,0,0,0,0,0,0,0};
+    int sv[11] = {0,0,0,0,0,0,0,0,0,0,0};
+    int data[5] = {0,4,3,2,1};
+    
+    int stime;
+    long ltime;
+    ltime = time(NULL);
+    stime = (unsigned) ltime/2;
+    srand(stime);
+    
+//------------Заполнение кораблей------------\\
+    
+    for (int i = 1; i<11;i++){
+        for (int j = 1; j<11;j++){
+            inf rg = create();
+            a[i][j]=rg;
+        }
+    }//Заполниние массива случайными числами
+    FillingInAmounts(a); //Создание -1 значения суммы
+    
+    War4(a, data); //Корабль 4
+    War3(a, data); //Корабль 3
+    War2(a, data); //Корабль 2
+    War1(a, data); //Корабль 1
+    
+    SumGor(a, sg);//Сумма горизонтали
+    SumVer(a, sv);//Сумма вертикали
+    
+    
+//------------------Меню------------------\\
+    
+    int n;
+    int d=1;
+    while (d==1) {
+        printf("Добро пожаловать в Цифровой морской бой!\n");
+        printf("1-Играть\n2-Ответ\n3-Правила\n4-Выход\n");
+        scanf("%i",&n);
+        switch (n) {
+            case 1:
+                Games(a,sg,sv);
+                printf("Ответы:\n");
+                PrintAnswers(a,sg,sv);
+                break;
+            case 2:
+                PrintAnswers(a,sg,sv);
+                break;
+            case 3:
+                Rules();
+//                printf("Тут должны быть правила\n");
+                break;
+            case 4:
+                d=0;
+                break;
+        }
+    }
+}
+
 inf create(){
     
     inf d;
@@ -15,39 +92,39 @@ inf create(){
 
 void PrintAnswers(inf b[][11],int sg[11],int sv[11]){
     printf("     A   B   C   D   E   F   G   H   I   J  \n");
-    printf("   ┏━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┓\n");
+    //printf("   ┏━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┓\n");
     printf(" 1 ");
     for (int i = 1; i<11;i++){
         if(b[1][i].sum==-1){
-            printf("┃   ");
+            printf("    ");
         }else if(b[1][i].sum==-2){
-            printf("┃ x ");
+            printf("  x ");
         }else if(b[1][i].sum==-3){
-            printf("┃ o ");
+            printf("  o ");
         }else{
-            printf("┃%2i ",b[1][i].sum);
+            printf(" %2i ",b[1][i].sum);
         }
     }
-    printf("┃ %i\n",sg[1]);
+    printf("  %i\n",sg[1]);
     for (int i=2; i<=10;i++)
     {
-        printf("   ┣━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━┫\n");
+        //printf("   ┣━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━┫\n");
         printf("%2i ",i);
         for (int j = 1; j<11;j++){
             if(b[i][j].sum==-1){
-                printf("┃   ");
+                printf("    ");
             }else if(b[i][j].sum==-2){
-                printf("┃ x ");
+                printf("  x ");
             }else if(b[i][j].sum==-3){
-                printf("┃ o ");
+                printf("  o ");
             }else{
-                printf("┃%2i ",b[i][j].sum);
+                printf(" %2i ",b[i][j].sum);
             }
         }
-        printf("┃ %i\n",sg[i]);
+        printf("  %i\n",sg[i]);
         
     }
-    printf("   ┗━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┛\n");
+//    printf("   ┗━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┛\n");
     printf("    ");
     for (int i=1;i<=10;i++){
         printf("%2i  ",sv[i]);
@@ -57,31 +134,31 @@ void PrintAnswers(inf b[][11],int sg[11],int sv[11]){
 
 void PrintField(inf a[][11],int sg[11],int sv[11]){
     printf("     A   B   C   D   E   F   G   H   I   J  \n");
-    printf("   ┏━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┓\n");
+    //printf("   ┏━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┓\n");
     printf(" 1 ");
     for (int i = 1; i<11;i++){
         if (a[1][i].sum==-2){
-            printf("┃x %i",a[1][i].cn);
+            printf(" x %i",a[1][i].cn);
         }else{
-            printf("┃%2i ",a[1][i].cn);
+            printf(" %2i ",a[1][i].cn);
         }
     }
-    printf("┃ %i\n",sg[1]);
+    printf("  %i\n",sg[1]);
     for (int i=2; i<=10;i++)
     {
-        printf("   ┣━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━┫\n");
+        //printf("   ┣━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━┫\n");
         printf("%2i ",i);
         for (int j = 1; j<11;j++){
             if (a[i][j].sum==-2){
-                printf("┃x %i",a[i][j].cn);
+                printf(" x %i",a[i][j].cn);
             }else{
-                printf("┃%2i ",a[i][j].cn);
+                printf(" %2i ",a[i][j].cn);
             }
         }
-        printf("┃ %i\n",sg[i]);
+        printf("  %i\n",sg[i]);
 
     }
-    printf("   ┗━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┛\n");
+    //printf("   ┗━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┛\n");
     printf("    ");
     for (int i=1;i<=10;i++){
         printf("%2i  ",sv[i]);
@@ -89,13 +166,13 @@ void PrintField(inf a[][11],int sg[11],int sv[11]){
     printf("\n");
 }
 
-inf FillingInAmounts(inf b[][11]){
+int FillingInAmounts(inf b[][11]){
     for (int i = 1; i<11;i++){
         for (int j = 1; j<11;j++){
             b[i][j].sum=-1;
         }
     }
-    return b[11][11];
+    return 0;
 }
 
 int SumVer(inf b[][11], int* sv){
@@ -119,8 +196,6 @@ int SumGor(inf b[][11], int* sg){
     }
     return 1;
 }
-
-struct tm *mytime;
 
 int Transformation(char p){
     int py;
@@ -287,68 +362,6 @@ void Games(inf b[][11], int *sg, int *sv){
                 hp--;
                 print_hp(hp);
             }
-        }
-    }
-}
-
-void main() {
-    
-//------------Объявление переменных------------\\
-    
-    inf a[11][11];
-    int sg[11] = {0,0,0,0,0,0,0,0,0,0,0};
-    int sv[11] = {0,0,0,0,0,0,0,0,0,0,0};
-    int data[5] = {0,4,3,2,1};
-    
-    int stime;
-    long ltime;
-    ltime = time(NULL);
-    stime = (unsigned) ltime/2;
-    srand(stime);
-    
-//------------Заполнение кораблей------------\\
-    
-    for (int i = 1; i<11;i++){
-        for (int j = 1; j<11;j++){
-            inf rg = create();
-            a[i][j]=rg;
-        }
-    }//Заполниние массива случайными числами
-    a[11][11] = FillingInAmounts(a); //Создание -1 значения суммы
-    
-    War4(a, data); //Корабль 4
-    War3(a, data); //Корабль 3
-    War2(a, data); //Корабль 2
-    War1(a, data); //Корабль 1
-    
-    SumGor(a, sg);//Сумма горизонтали
-    SumVer(a, sv);//Сумма вертикали
-    
-    
-//------------------Меню------------------\\
-    
-    int n;
-    int d=1;
-    while (d==1) {
-        printf("Добро пожаловать в Цифровой морской бой!\n");
-        printf("1-Играть\n2-Ответ\n3-Правила\n4-Выход\n");
-        scanf("%i",&n);
-        switch (n) {
-            case 1:
-                Games(a,sg,sv);
-                printf("Ответы:\n");
-                PrintAnswers(a,sg,sv);
-                break;
-            case 2:
-                PrintAnswers(a,sg,sv);
-                break;
-            case 3:
-                Rules();
-//                printf("Тут должны быть правила\n");
-                break;
-            case 4:
-                d=0;
-                break;
         }
     }
 }
